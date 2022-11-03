@@ -1,0 +1,197 @@
+plugins {
+    id 'com.diffplug.spotless' version '6.11.0'
+    id 'com.github.ben-manes.versions' version '0.42.0'
+    id 'com.github.spotbugs' version '5.0.12'
+    id 'com.star-zero.gradle.githook' version '1.2.1'
+    id 'io.quarkus' version '2.12.2.Final'
+    id 'pl.allegro.tech.build.axion-release' version '1.14.1'
+    id 'ru.netris.commitlint' version '1.4.1'
+    id 'se.bjurr.gitchangelog.git-changelog-gradle-plugin' version '1.73.0'
+    id 'checkstyle'
+    id 'jacoco'
+    id 'java'
+    id 'pmd'
+}
+
+group = 'lambda'
+version = scmVersion.version
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    integrationTest {
+        compileClasspath += sourceSets.main.output + project.configurations.testCompileClasspath
+        runtimeClasspath += sourceSets.main.output + project.configurations.testRuntimeClasspath
+    }
+}
+
+dependencies {
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    implementation enforcedPlatform('io.quarkus.platform:quarkus-bom:2.12.2.Final')
+    implementation enforcedPlatform('io.quarkus.platform:quarkus-amazon-services-bom:2.12.2.Final')
+    implementation 'io.quarkiverse.amazonservices:quarkus-amazon-dynamodb-enhanced:1.3.1'
+    implementation 'io.quarkus:quarkus-amazon-lambda'
+    implementation 'io.quarkus:quarkus-amazon-dynamodb'
+    implementation 'io.quarkus:quarkus-rest-client'
+    implementation 'io.quarkus:quarkus-rest-client-jackson'
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+    implementation 'org.projectlombok:lombok:1.18.24'
+    implementation 'software.amazon.awssdk:url-connection-client:2.18.7'
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.quarkus:quarkus-junit5-mockito'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.assertj:assertj-core:3.23.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.8.0'
+    testImplementation 'org.testcontainers:testcontainers:1.17.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.17.3'
+    testImplementation 'org.testcontainers:localstack:1.17.3'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+githook {
+    failOnMissingHooksDir = false
+    hooks {
+        'commit-msg' {
+            task = 'commitlint'
+        }
+    }
+}
+
+checkstyle {
+    toolVersion = '9.0'
+    configFile = file('checkstyle.xml')
+}
+
+pmd {
+    toolVersion = '6.38.0'
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+        importOrder()
+        removeUnusedImports()
+        prettier([
+            'prettier': '2.5.1',
+            'prettier-plugin-java': '1.6.1'
+        ]).configFile('.prettierrc')
+    }
+}
+
+spotbugs {
+  toolVersion = '4.4.1'
+}
+
+jacoco {
+    toolVersion = '0.8.7'
+}
+
+jacocoTestReport {
+    dependsOn test
+    finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.8
+            }
+        }
+    }
+}
+
+check {
+    dependsOn.clear()
+    dependsOn 'lint', 'test'
+}
+
+test {
+    finalizedBy jacocoTestReport
+	useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs the integration tests.'
+    group = 'Verification'
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
+task lint() {
+    dependsOn 'formatCheck', 'checkstyle', 'pmd', 'spotbugs'
+    description = 'Runs several static code analysis.'
+    group = 'Verification'
+}
+
+task checkstyle() {
+    dependsOn 'checkstyleIntegrationTest', 'checkstyleMain', 'checkstyleTest'
+    description = 'Runs Checkstyle analysis for the source folder.'
+    group = 'Verification'
+}
+
+task pmd() {
+    dependsOn 'pmdIntegrationTest', 'pmdMain', 'pmdTest'
+    description = 'Runs PMD analysis for the source folder.'
+    group = 'Verification'
+}
+
+task spotbugs() {
+    dependsOn 'spotbugsIntegrationTest', 'spotbugsMain', 'spotbugsTest'
+    description = 'Runs SpotBugs analysis for the source folder.'
+    group = 'Verification'
+
+    tasks.withType(com.github.spotbugs.snom.SpotBugsTask) {
+        reports {
+            html.enabled = true
+        }
+    }
+}
+
+task format() {
+    dependsOn 'spotlessApply'
+    description = 'Applies code formatting steps to source code in-place.'
+    group = 'Verification'
+}
+
+task formatCheck() {
+    dependsOn 'spotlessCheck'
+    description = 'Checks that source code satisfies formatting steps.'
+    group = 'Verification'
+}
+
+task generateChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTask) {
+    description = 'Generates a changelog from GIT repository.'
+    group = 'Release'
+    fromRepo = file('.')
+    file = file('CHANGELOG.md');
+    templateContent = file('changelog.mustache').getText('UTF-8');
+}
+
+task deploy(type: Exec) {
+    commandLine 'sam', 'deploy', '--guided'
+    description = 'Deploys the application to AWS.'
+    group = 'Release'
+}

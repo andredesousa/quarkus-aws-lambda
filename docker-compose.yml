@@ -1,0 +1,14 @@
+
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack:1.2.0
+    ports:
+      - "4566:4566"
+    environment:
+      - DEBUG=1
+      - PERSISTENCE=1
+      - SERVICES=dynamodb
+    volumes:
+       - "./.localstack:/var/lib/localstack"
