@@ -1,10 +1,13 @@
 package lambda.service;
 
+import api.model.User;
+import api.service.ApiException;
+import api.service.UserApi;
 import com.amazonaws.services.lambda.runtime.Context;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.ProcessingException;
 import lambda.entity.Person;
-import lambda.entity.User;
 import lambda.mapper.UserToPersonMapper;
 import lambda.repository.PersonRepository;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -14,7 +17,7 @@ public class ProcessingService {
 
     @Inject
     @RestClient
-    protected transient UserService userService;
+    protected transient UserApi userService;
 
     @Inject
     protected transient UserToPersonMapper mapper;
@@ -22,12 +25,12 @@ public class ProcessingService {
     @Inject
     protected transient PersonRepository personRepository;
 
-    public Long process(Long id, Context context) {
-        User user = userService.getById(id);
+    public Integer process(Integer id, Context context) throws ProcessingException, ApiException {
+        User user = userService.findById(id);
         Person person = mapper.userToPerson(user);
 
         personRepository.insert(person);
 
-        return Long.valueOf(personRepository.findAll().size());
+        return personRepository.findAll().size();
     }
 }

@@ -5,9 +5,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import api.model.User;
+import api.service.UserApi;
 import java.util.List;
 import lambda.entity.Person;
-import lambda.entity.User;
 import lambda.mapper.UserToPersonMapper;
 import lambda.repository.PersonRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ProcessingServiceTests {
 
     @Mock
-    transient UserService userService;
+    transient UserApi userService;
 
     @Mock
     transient PersonRepository personRepository;
@@ -37,11 +38,15 @@ public class ProcessingServiceTests {
 
     @Test
     @DisplayName("#process inserts a Person and returns the number of results")
-    void process() {
-        when(userService.getById(1L)).thenReturn(new User());
+    void process() throws Exception {
+        when(userService.findById(1)).thenReturn(new User());
         when(personRepository.findAll()).thenReturn(List.of(new Person()));
 
-        assertThat(service.process(1L, null)).isEqualTo(1L);
+        Integer result = service.process(1, null);
+
+        assertThat(result).isEqualTo(1);
+        verify(mapper).userToPerson(any(User.class));
         verify(personRepository).insert(any(Person.class));
+        verify(personRepository).findAll();
     }
 }
