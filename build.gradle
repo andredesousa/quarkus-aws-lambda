@@ -56,6 +56,7 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers:1.17.3'
     testImplementation 'org.testcontainers:junit-jupiter:1.17.3'
     testImplementation 'org.testcontainers:localstack:1.17.3'
+    testImplementation 'com.amazonaws:aws-java-sdk-core:1.12.335'
 }
 
 java {
@@ -233,6 +234,6 @@ task generateChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTas
 
 task deploy(type: Exec) {
     commandLine 'sam', 'deploy', '--guided'
-    description = 'Deploys the application to AWS.'
+    description = 'Deploys the lambda to AWS.'
     group = 'Release'
 }

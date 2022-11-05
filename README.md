@@ -52,7 +52,9 @@ Based on best practices from the community, Quarkus, other github projects and d
 ├── LICENSE
 ├── lombok.config
 ├── README.md
-└── settings.gradle
+├── sam.yaml
+├── settings.gradle
+└── spotbugs-exclude.xml
 ```
 
 All of the app's code goes in a folder named `src/main`.
@@ -78,14 +80,14 @@ The next tasks should be executed in a console inside the root directory:
 - `./gradlew dependencyUpdates` - Displays the dependency updates for the project.
 - `./gradlew quarkusBuild` - Quarkus builds a runner jar based on the build jar.
 - `./gradlew release` - Performs release, creates tag and pushes it to remote.
-- `./gradlew deploy` - Deploys the application to AWS.
+- `./gradlew deploy` - Deploys the lambda to AWS.
 - `./gradlew help` - Displays a help message.
 
 For more details, read the [Command-Line Interface](https://docs.gradle.org/current/userguide/command_line_interface.html) documentation in the [Gradle User Manual](https://docs.gradle.org/current/userguide/userguide.html).
 
 ## Running in development mode
 
-You can run your application in dev mode that enables live coding using `./gradlew quarkusDev` command.
+You can run your lambda in dev mode that enables live coding using `./gradlew quarkusDev` command.
 
 [Lombok](https://projectlombok.org/) provides several annotations designed to avoid writing Java code known to be repetitive and/or boilerplate.
 
@@ -205,6 +207,7 @@ For further reference, please consider the following sections:
 - [Quarkus - REST Client](https://quarkus.io/guides/rest-client)
 - [Quarkus - Amazon Lambda](https://quarkus.io/guides/amazon-lambda)
 - [Quarkus - Testing your application](https://quarkus.io/guides/getting-started-testing)
+- [A Guide to REST-assured](https://www.baeldung.com/rest-assured-tutorial)
 - [Testcontainers - LocalStack Module](https://www.testcontainers.org/modules/localstack/)
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.

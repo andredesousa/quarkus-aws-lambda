@@ -80,11 +80,11 @@ public class PersonRepositoryTests {
     }
 
     @Test
-    @DisplayName("#delete deletes the Person by ID")
-    void delete() {
+    @DisplayName("#deleteById deletes the Person by ID")
+    void deleteById() {
         when(dbTable.getItem(any(Key.class))).thenReturn(new Person());
 
-        repository.delete(1L);
+        repository.deleteById(1L);
 
         verify(dbTable).deleteItem(new Person());
     }
