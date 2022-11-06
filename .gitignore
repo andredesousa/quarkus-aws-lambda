@@ -46,5 +46,6 @@ nb-configuration.xml
 *.rej
 
 # Local environment
+payload.json
 .localstack
 .env

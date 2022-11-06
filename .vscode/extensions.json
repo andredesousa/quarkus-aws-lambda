@@ -4,6 +4,7 @@
     "EditorConfig.EditorConfig",
     "redhat.vscode-quarkus",
     "shengchen.vscode-checkstyle",
-    "vscjava.vscode-java-pack"
+    "vscjava.vscode-java-pack",
+    "vscjava.vscode-lombok"
   ]
 }

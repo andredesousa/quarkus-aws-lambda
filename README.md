@@ -1,6 +1,7 @@
-# Base AWS lambda Function
+# AWS lambda with Quarkus
 
-It provides a complete **Lambda Function** configured, including build, test, and deploy scripts as examples.
+This project uses [Quarkus](https://quarkus.io/), the Supersonic Subatomic Java Framework to create an [AWS Lambda](https://aws.amazon.com/lambda/).
+It provides a complete **AWS lambda** configured, including build, test, and deploy scripts as examples.
 It is recommended to have, at least, **Java 11**, [Docker](https://www.docker.com/) and [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) installed.
 
 ## Table of Contents
@@ -40,21 +41,14 @@ Based on best practices from the community, Quarkus, other github projects and d
 |  |     ├── application-prod.properties
 |  |     └── application.properties
 |  └── test
-├── .editorconfig
-├── .gitignore
-├── .prettierrc
 ├── build.gradle
 ├── CHANGELOG.md
-├── changelog.mustache
-├── checkstyle.xml
 ├── gradlew
 ├── gradlew.bat
 ├── LICENSE
-├── lombok.config
 ├── README.md
 ├── sam.yaml
-├── settings.gradle
-└── spotbugs-exclude.xml
+└── settings.gradle
 ```
 
 All of the app's code goes in a folder named `src/main`.
@@ -87,9 +81,20 @@ For more details, read the [Command-Line Interface](https://docs.gradle.org/curr
 
 ## Running in development mode
 
-You can run your lambda in dev mode that enables live coding using `./gradlew quarkusDev` command.
+You can run your lambda in Quarkus Dev Mode that enables live coding using `./gradlew quarkusDev` command.
+Quarkus scans your project for a class that directly implements the Amazon `RequestHandler<?, ?>` or `RequestStreamHandler` interface.
+You can feed events to it by doing an HTTP POST to <http://localhost:8080>.
 
-[Lombok](https://projectlombok.org/) provides several annotations designed to avoid writing Java code known to be repetitive and/or boilerplate.
+The mock event server will receive the events and your lambda will be invoked. Here’s an example:
+
+```bash
+curl -d 1 -X POST http://localhost:8080
+```
+
+Alternatively, [Postman](https://www.postman.com/) is currently one of the most popular tools used for API testing.
+
+This project uses [OpenAPI Generator](https://openapi-generator.tech/) for generation of [Rest Clients](https://quarkus.io/guides/rest-client) based on OpenAPI specification files.
+It also uses [Lombok](https://projectlombok.org/) and [MapStruct](https://mapstruct.org/).
 
 ## Linting and formatting code
 
@@ -145,6 +150,13 @@ You can debug the source code, add breakpoints, inspect variables and view the a
 Also, you can use the IDE for debugging the source code, unit and integration tests.
 You can customize the [log verbosity](https://docs.gradle.org/current/userguide/logging.html#logging) of gradle tasks using the `-i` or `--info` flag.
 
+If you do not want to use the mock event server, you can test your lambdas with AWS SAM CLI.
+You can invoke your AWS Lambda function locally by using the `sam local invoke` command. Here’s an example:
+
+```bash
+sam local invoke --template sam.yml --event payload.json
+```
+
 ## Commit messages convention
 
 In order to have a consistent git history every commit must follow a specific template. Here's the template:
@@ -182,6 +194,8 @@ The subject contains a succinct description of the change.
 
 ## Building and deploying
 
+In `.github` folder, you can find workflows for GitHub with examples for building, testing and deploying your lambda to AWS.
+
 This project follows [Semantic Versioning](https://semver.org/) and uses git tags to define the current version of the project.
 Use `./gradlew currentVersion` to print the current version extracted from SCM and `./gradlew release` to release the current version.
 
@@ -191,10 +205,11 @@ You can create your lambda using:
 ./gradlew quarkusBuild
 ```
 
-You can then execute your lambda with: `java -jar ./build/lambda-0.1.0-SNAPSHOT-runner.jar`.
-Note, you need to pass your credentials.
+You can then execute your lambda with `java -jar ./build/lambda-0.1.0-SNAPSHOT-runner.jar` command.
+Note that in production mode, the lambda uses AWS default credentials.
 
 Also, you can deploy this project to AWS using `./gradlew deploy` command.
+It requires `AWS SAM CLI` installed.
 
 ## Reference documentation
 
@@ -202,6 +217,7 @@ For further reference, please consider the following sections:
 
 - [Official Gradle documentation](https://docs.gradle.org)
 - [AWS Lambda function handler in Java](https://docs.aws.amazon.com/lambda/latest/dg/java-handler.html)
+- [AWS Serverless Application Model](https://aws.amazon.com/serverless/sam/)
 - [Quarkus - QuickStarts](https://github.com/quarkusio/quarkus-quickstarts)
 - [Quarkus - Creating your first application](https://quarkus.io/guides/getting-started)
 - [Quarkus - REST Client](https://quarkus.io/guides/rest-client)
@@ -209,5 +225,7 @@ For further reference, please consider the following sections:
 - [Quarkus - Testing your application](https://quarkus.io/guides/getting-started-testing)
 - [A Guide to REST-assured](https://www.baeldung.com/rest-assured-tutorial)
 - [Testcontainers - LocalStack Module](https://www.testcontainers.org/modules/localstack/)
+- [Quick Guide to MapStruct](https://www.baeldung.com/mapstruct)
+- [Introduction to Project Lombok](https://www.baeldung.com/intro-to-project-lombok)
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.

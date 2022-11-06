@@ -233,7 +233,7 @@ task generateChangelog(type: se.bjurr.gitchangelog.plugin.gradle.GitChangelogTas
 }
 
 task deploy(type: Exec) {
-    commandLine 'sam', 'deploy', '--guided'
+    commandLine 'sam', 'deploy', '--template', 'sam.yml'
     description = 'Deploys the lambda to AWS.'
     group = 'Release'
 }
