@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build Lambda
-        run: ./gradlew jar -i
+        run: ./gradlew quarkusBuild -i
 
       - name: Code Analysis
         run: ./gradlew lint -i

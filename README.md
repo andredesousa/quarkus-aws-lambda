@@ -1,7 +1,7 @@
-# AWS lambda with Quarkus
+# AWS Lambda with Quarkus
 
-This project uses [Quarkus](https://quarkus.io/), the Supersonic Subatomic Java Framework to create an [AWS Lambda](https://aws.amazon.com/lambda/).
-It provides a complete **AWS lambda** configured, including build, test, and deploy scripts as examples.
+This project uses [Quarkus](https://quarkus.io/) and [LocalStack](https://localstack.cloud/) to support the development of an [AWS Lambda](https://aws.amazon.com/lambda/).
+It provides a complete **AWS Lambda** configured, including build, test, and deploy scripts as examples.
 It is recommended to have, at least, **Java 11**, [Docker](https://www.docker.com/) and [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) installed.
 
 ## Table of Contents
@@ -45,7 +45,6 @@ Based on best practices from the community, Quarkus, other github projects and d
 ├── CHANGELOG.md
 ├── gradlew
 ├── gradlew.bat
-├── LICENSE
 ├── README.md
 ├── sam.yaml
 └── settings.gradle
@@ -92,6 +91,10 @@ curl -d 1 -X POST http://localhost:8080
 ```
 
 Alternatively, [Postman](https://www.postman.com/) is currently one of the most popular tools used for API testing.
+
+In local development, you need to provide a connection to AWS services.
+[LocalStack](https://localstack.cloud/) is a cloud service emulator that runs in a single container on your laptop or in your CI environment.
+With LocalStack, you can run your AWS applications or Lambdas entirely on your local machine without connecting to a remote cloud provider.
 
 This project uses [OpenAPI Generator](https://openapi-generator.tech/) for generation of [Rest Clients](https://quarkus.io/guides/rest-client) based on OpenAPI specification files.
 It also uses [Lombok](https://projectlombok.org/) and [MapStruct](https://mapstruct.org/).
@@ -151,11 +154,6 @@ Also, you can use the IDE for debugging the source code, unit and integration te
 You can customize the [log verbosity](https://docs.gradle.org/current/userguide/logging.html#logging) of gradle tasks using the `-i` or `--info` flag.
 
 If you do not want to use the mock event server, you can test your lambdas with AWS SAM CLI.
-You can invoke your AWS Lambda function locally by using the `sam local invoke` command. Here’s an example:
-
-```bash
-sam local invoke --template sam.yml --event payload.json
-```
 
 ## Commit messages convention
 
@@ -207,6 +205,7 @@ You can create your lambda using:
 
 You can then execute your lambda with `java -jar ./build/lambda-0.1.0-SNAPSHOT-runner.jar` command.
 Note that in production mode, the lambda uses AWS default credentials.
+You can invoke your AWS Lambda function locally by using the `sam local invoke --template sam.yml --event payload.json` command.
 
 Also, you can deploy this project to AWS using `./gradlew deploy` command.
 It requires `AWS SAM CLI` installed.
