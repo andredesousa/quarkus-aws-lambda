@@ -95,6 +95,8 @@ Alternatively, [Postman](https://www.postman.com/) is currently one of the most 
 In local development, you need to provide a connection to AWS services.
 [LocalStack](https://localstack.cloud/) is a cloud service emulator that runs in a single container on your laptop or in your CI environment.
 With LocalStack, you can run your AWS applications or Lambdas entirely on your local machine without connecting to a remote cloud provider.
+This project provides a [docker-compose.yml](docker-compose.yml) file.
+You can use `docker-compose up` command to initialize LocalStack.
 
 This project uses [OpenAPI Generator](https://openapi-generator.tech/) for generation of [Rest Clients](https://quarkus.io/guides/rest-client) based on OpenAPI specification files.
 It also uses [Lombok](https://projectlombok.org/) and [MapStruct](https://mapstruct.org/).
