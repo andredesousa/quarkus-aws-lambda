@@ -82,11 +82,11 @@ githook {
 }
 
 openApiGenerate {
-    generatorName = "java"
-    library = "microprofile"
-    inputSpec = "src/main/resources/openapi/api.json"
-    apiPackage = "api.service"
-    modelPackage = "api.model"
+    generatorName = 'java'
+    library = 'microprofile'
+    inputSpec = "$rootDir/src/main/resources/openapi/api.json"
+    apiPackage = 'api.service'
+    modelPackage = 'api.model'
     generateApiTests = false
     generateModelTests = false
     generateApiDocumentation = false
@@ -122,7 +122,7 @@ spotless {
 
 spotbugs {
     toolVersion = '4.4.1'
-    excludeFilter = file("spotbugs-exclude.xml")
+    excludeFilter = file('spotbugs-exclude.xml')
 }
 
 jacoco {
