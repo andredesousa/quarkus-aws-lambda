@@ -2,7 +2,7 @@
 
 This project uses [Quarkus](https://quarkus.io/) and [LocalStack](https://localstack.cloud/) to support the development of an [AWS Lambda](https://aws.amazon.com/lambda/).
 It provides a complete **AWS Lambda** configured, including build, test, and deploy scripts as examples.
-It is recommended to have, at least, **Java 11**, [Docker](https://www.docker.com/) and [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html) installed.
+It is recommended to have, at least, **Java 11**, [Docker](https://www.docker.com/) and [AWS SAM CLI](https://aws.amazon.com/serverless/sam/) installed.
 
 ## Table of Contents
 
@@ -69,6 +69,7 @@ The next tasks should be executed in a console inside the root directory:
 - `./gradlew format` - Applies code formatting steps to source code in-place.
 - `./gradlew clean` - Deletes the build directory.
 - `./gradlew javadoc` - Generates Javadoc API documentation for the main source code.
+- `./gradlew openApiGenerate` - Generate code for Open API specification documents.
 - `./gradlew generateChangelog` - Generates a changelog from GIT repository.
 - `./gradlew dependencyUpdates` - Displays the dependency updates for the project.
 - `./gradlew quarkusBuild` - Quarkus builds a runner jar based on the build jar.
@@ -218,7 +219,6 @@ For further reference, please consider the following sections:
 
 - [Official Gradle documentation](https://docs.gradle.org)
 - [AWS Lambda function handler in Java](https://docs.aws.amazon.com/lambda/latest/dg/java-handler.html)
-- [AWS Serverless Application Model](https://aws.amazon.com/serverless/sam/)
 - [Quarkus - QuickStarts](https://github.com/quarkusio/quarkus-quickstarts)
 - [Quarkus - Creating your first application](https://quarkus.io/guides/getting-started)
 - [Quarkus - REST Client](https://quarkus.io/guides/rest-client)
@@ -228,5 +228,6 @@ For further reference, please consider the following sections:
 - [Testcontainers - LocalStack Module](https://www.testcontainers.org/modules/localstack/)
 - [Quick Guide to MapStruct](https://www.baeldung.com/mapstruct)
 - [Introduction to Project Lombok](https://www.baeldung.com/intro-to-project-lombok)
+- [Deploy Java Lambda functions](https://docs.aws.amazon.com/lambda/latest/dg/java-package.html)
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
