@@ -1,14 +1,14 @@
 # Changelog
 
 {{#tags}}
-## [{{name}}](https://github.com/andredesousa/base-aws-lambda/compare/{{name}}) ({{tagDate .}})
+## [{{name}}](https://github.com/andredesousa/quarkus-aws-lambda/compare/{{name}}) ({{tagDate .}})
 
   {{#ifContainsType commits type='feat'}}
 ### Features
 
     {{#commits}}
       {{#ifCommitType . type='feat'}}
-- {{#eachCommitScope .}}**{{.}}** {{/eachCommitScope}}{{{commitDescription .}}} ([{{hash}}](https://github.com/andredesousa/base-aws-lambda/commit/{{hashFull}}))
+- {{#eachCommitScope .}}**{{.}}** {{/eachCommitScope}}{{{commitDescription .}}} ([{{hash}}](https://github.com/andredesousa/quarkus-aws-lambda/commit/{{hashFull}}))
       {{/ifCommitType}}
     {{/commits}}
   {{/ifContainsType}}
@@ -18,7 +18,7 @@
 
     {{#commits}}
       {{#ifCommitType . type='fix'}}
-- {{#eachCommitScope .}}**{{.}}** {{/eachCommitScope}}{{{commitDescription .}}} ([{{hash}}](https://github.com/andredesousa/base-aws-lambda/commit/{{hashFull}}))
+- {{#eachCommitScope .}}**{{.}}** {{/eachCommitScope}}{{{commitDescription .}}} ([{{hash}}](https://github.com/andredesousa/quarkus-aws-lambda/commit/{{hashFull}}))
       {{/ifCommitType}}
     {{/commits}}
   {{/ifContainsType}}
